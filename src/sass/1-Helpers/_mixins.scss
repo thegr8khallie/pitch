@@ -1,0 +1,5 @@
+@mixin circleConstructor($diameter) {
+  width: $diameter;
+  height: $diameter;
+  border-radius: 50%;
+}

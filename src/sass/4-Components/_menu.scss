@@ -1,0 +1,42 @@
+@use "../1-Helpers/helpers" as *;
+
+.menu {
+  flex-basis: 15vw;
+  padding: 15vh 2rem 15vh 0;
+}
+.menu-item {
+  color: $grayWeb;
+  transition: 0.25s;
+  margin-bottom: 1rem;
+  div {
+    display: inline-block;
+    transition: 0.5s;
+    padding: 1rem 1.5rem 1rem 3rem;
+    border-radius: 0 9rem 9rem 0;
+    margin-left: -2rem;
+  }
+  span {
+    margin-left: 2rem;
+    transition: 0.5s;
+  }
+  &:hover {
+    cursor: pointer;
+    div {
+      color: white;
+
+      background: linear-gradient(to right, $frenchSkyBlue, $blueCrayola);
+    }
+    span {
+      color: $frenchSkyBlue;
+    }
+  }
+}
+.menu-item:nth-child(1) {
+  div {
+    color: white;
+    background: linear-gradient(to right, $frenchSkyBlue, $blueCrayola);
+  }
+  span {
+    color: $frenchSkyBlue;
+  }
+}

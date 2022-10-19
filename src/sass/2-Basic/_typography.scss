@@ -1,0 +1,25 @@
+@use "../1-Helpers/helpers" as *;
+
+@font-face {
+  font-family: monserrat-med;
+  src: url(../../assets/fonts/Montserrat-Medium.ttf) format("truetype");
+}
+@font-face {
+  font-family: monserrat-bold;
+  src: url(../../assets/fonts/Montserrat-Bold.ttf) format("truetype");
+}
+body {
+  font-size: 1.6rem;
+  color: $grayWeb;
+}
+
+* {
+  font-family: $monMed;
+}
+h1,
+h2,
+h3,
+h4 {
+  font-family: $monBold;
+  color: $onyx;
+}

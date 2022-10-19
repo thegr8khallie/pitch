@@ -1,0 +1,125 @@
+@use "../1-Helpers/helpers" as *;
+
+.activity-section {
+  flex-basis: 25vw;
+  padding: 1rem;
+}
+.friends-activity-log {
+  margin-bottom: 5vh;
+}
+.friends-titlebar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  h3 {
+    color: $onyx;
+  }
+  p {
+    color: $grayWeb;
+  }
+}
+.friend-icon {
+  color: $grayWeb;
+}
+.friend {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  div:not(.friend-info) {
+    @include circleConstructor(4rem);
+    overflow: hidden;
+  }
+  div.friend-info {
+    h4 {
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 1.2rem;
+    }
+  }
+}
+.now-playing {
+  height: 55vh;
+  position: relative;
+  border-radius: 3rem;
+  overflow: hidden;
+  transition: 1s;
+}
+.now-playing-info {
+  position: absolute;
+  bottom: 0;
+  padding: 1rem 2.5rem;
+  width: 100%;
+  border-radius: 3rem;
+  background-color: transparentize($onyx, 0.6);
+  backdrop-filter: blur(2rem);
+  -webkit-backdrop-filter: blur(2rem);
+  transition: 1s;
+  h2 {
+    font-size: 1.6rem;
+  }
+  p {
+    font-size: 1.2rem;
+    color: $platinum;
+  }
+}
+.more-info {
+  display: none;
+}
+.buttons-tab {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 2rem;
+  button {
+    color: $platinum;
+    background-color: inherit;
+    border: none;
+    font-size: 2.5rem;
+    padding: 1rem;
+  }
+}
+.seek-container {
+  margin: 0 auto 3rem auto;
+  height: 0.5rem;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: flex-start;
+}
+.seek {
+  height: 0.5rem;
+  width: 100%;
+  border-radius: 1rem;
+}
+
+.timer-container {
+  color: $platinum;
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: -2rem;
+  margin-bottom: 1.5rem;
+  .time-played {
+    margin-left: 1.5rem;
+  }
+  .time-left {
+    margin-right: 1.5rem;
+  }
+}
+.now-playing:hover {
+  .now-playing-info {
+    padding: 2rem 2.5rem 1rem 2.5rem;
+  }
+  .now-playing-info h2 {
+    text-align: center;
+  }
+  .now-playing-info p {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .more-info {
+    display: block;
+  }
+}
