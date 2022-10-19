@@ -1,5 +1,5 @@
-import { Home, Loyalty, Marketplace } from './screens'
-import './scss/style.scss'
+import { Home } from "./screens";
+import "./sass/style.scss";
 
 const App = () => {
   return (
@@ -7,6 +7,6 @@ const App = () => {
       <Home />
     </div>
   );
-}
+};
 
 export default App;
