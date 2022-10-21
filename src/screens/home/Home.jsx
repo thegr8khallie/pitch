@@ -130,7 +130,6 @@ export const Home = () => {
   const startTimer = () => {
     // Clear any timers already running
     clearInterval(intervalRef.current);
-
     intervalRef.current = setInterval(() => {
       if (audio.current.ended) {
         nextHandler();
@@ -261,7 +260,8 @@ export const Home = () => {
       price: 1000,
     }
   ];
-  const myAlgoWallet = new MyAlgoConnect()
+  const myAlgoWallet = new MyAlgoConnect();
+  //localStorage.setItem('play-time', 0)
   const [isWithdrawFormOpen, setIsWithdrawFormOpen] = useState(false)
   const [myAlgo, setMyAlgo] = useState({
     address: '',
@@ -272,7 +272,21 @@ export const Home = () => {
       setMyAlgo(JSON.parse(localStorage.getItem('account')))
     }
   }, [])
+  let [currentSession, setCurrentSession] = useState(0);
+  let [totalSession, setTotalSession] = useState(0);
 
+  let interval = useRef()
+  useEffect(() => {
+    if (isPlaying) {
+      interval.current = setInterval(() => {
+        setCurrentSession(currentSession++)
+      }, 1000)
+    } else {
+      clearInterval(interval.current);
+      setTotalSession(totalSession + currentSession)
+      setCurrentSession(0)
+    }
+  }, [isPlaying])
   const connectWalletHandler = async () => {
     try {
       const accounts = await myAlgoWallet.connect()
@@ -288,9 +302,6 @@ export const Home = () => {
       setMyAlgo(JSON.parse(localStorage.getItem('account')))
     }
   }
-  // useEffect(() => {
-  //   setMyAlgo(JSON.parse(localStorage.getItem('account')))
-  // })
   const revealWithdrawFormHandler = () => {
     setIsWithdrawFormOpen(true)
   }
@@ -304,7 +315,7 @@ export const Home = () => {
   return (
     <div className="homepage">
       <Menu page={currentPage} dashboardLink={navToDashboardHandler} loyaltyLink={navToLoyaltyHandler} />
-      {currentPage === 'dashboard' ? <Dashboard songsList={songs} onClick={updateSongHandler} /> : <LoyaltyPromo wallet={myAlgo} connectWallet={connectWalletHandler} isFormOpen={isWithdrawFormOpen} revealForm={revealWithdrawFormHandler} submitForm={submitWithdrawFormHandler} nftList={nfts} />}
+      {currentPage === 'dashboard' ? <Dashboard songsList={songs} onClick={updateSongHandler} /> : <LoyaltyPromo wallet={myAlgo} connectWallet={connectWalletHandler} isFormOpen={isWithdrawFormOpen} revealForm={revealWithdrawFormHandler} submitForm={submitWithdrawFormHandler} nftList={nfts} playTime={totalSession} />}
       <Activity currentSong={currentlyPlaying} onClick={togglePlayHandler} isPlaying={isPlaying} prev={prevHandler} next={nextHandler} progress={trackProgress} duration={duration} seek={SeekHandler} seekEnd={seekEndHandler} songLength={songLength} playedLength={playedLength} />
     </div>
   )

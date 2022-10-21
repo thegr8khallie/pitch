@@ -7,7 +7,7 @@ export const LoyaltyPromo = (props) => {
                     <p className="loyalty-hero-text">Play, Get paid in our native token</p>
                 </div>
                 <div className="pitch-transact">
-                    <div className="pitch-balance"><p>30 Pitch</p></div>
+                    <div className="pitch-balance"><p>{props.playTime / 10} Pitch</p></div>
                     <div className="withdraw">
                         <button className="reveal-form" onClick={props.revealForm} style={props.isFormOpen ? { display: 'none' } : { display: 'block' }}>Withdraw</button>
                         <form className="withdraw-form" style={props.isFormOpen ? { display: 'block' } : { display: 'none' }} onSubmit={props.submitForm}>
@@ -21,7 +21,7 @@ export const LoyaltyPromo = (props) => {
             <div className="promo-info">
                 <div className="time-listened">
                     <h2>Time Listened</h2>
-                    <p>300 seconds</p>
+                    <p>{props.playTime} seconds</p>
                 </div>
                 {
                     props.wallet.isConnected ? <div className="address-container"><p>{props.wallet.address}</p></div> : <button className="connect-wallet" onClick={props.connectWallet}>Connect Wallet</button>
