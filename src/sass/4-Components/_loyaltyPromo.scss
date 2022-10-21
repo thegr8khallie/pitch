@@ -1,0 +1,145 @@
+@use "../1-Helpers/helpers" as *;
+
+.loyalty {
+  flex-basis: 60vw;
+  padding-top: 5rem;
+  height: 100vh;
+  overflow: scroll;
+}
+.loyalty-hero {
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+.pitch-transact {
+  display: flex;
+  gap: 1rem;
+}
+.pitch-balance {
+  padding: 1rem;
+  background-color: lighten($grayWeb, 15%);
+  border-radius: 9rem;
+  color: $onyx;
+}
+.withdraw {
+  display: flex;
+}
+.reveal-form {
+  padding: 1rem;
+  border-radius: 9rem;
+  background-color: $frenchSkyBlue;
+  border: 0.2rem solid $frenchSkyBlue;
+  transition: all 0.5s;
+}
+.withdraw-form {
+  transition: all 0.5s;
+  input[type="number"] {
+    padding: 1rem;
+    border: 0.2rem solid $grayWeb;
+    margin-right: 1rem;
+    &:focus {
+      outline: none;
+    }
+  }
+  input[type="submit"] {
+    padding: 1rem;
+    background-color: $frenchSkyBlue;
+    border: 0.2rem solid $frenchSkyBlue;
+  }
+}
+.promo-info {
+  display: flex;
+  justify-content: space-between;
+  padding: 2rem;
+  background-color: lighten($grayWeb, 30%);
+  margin-bottom: 3rem;
+}
+.time-listened {
+  h2 {
+    margin-bottom: 1rem;
+  }
+}
+.connect-wallet {
+  align-self: center;
+  padding: 1rem;
+  background-color: $frenchSkyBlue;
+  border: 0.2rem solid $frenchSkyBlue;
+  border-radius: 9rem;
+  color: $onyx;
+  width: 14rem;
+  text-align: center;
+}
+.address-container {
+  align-self: center;
+  padding: 1rem;
+  background-color: lighten($grayWeb, 15%);
+  border-radius: 9rem;
+  color: $onyx;
+  width: 14rem;
+  text-align: center;
+  p {
+    width: 100%;
+    padding: 0 0.5rem;
+    border-radius: 9rem;
+    overflow: hidden;
+  }
+}
+.marketplace {
+  > h1 {
+    margin-bottom: 1rem;
+  }
+  > p {
+    padding-bottom: 1rem;
+    border-bottom: 0.3rem solid;
+  }
+}
+.collection-name {
+  margin-top: 1rem;
+  font-size: 2rem;
+}
+.marketplace-items {
+  margin-top: 1rem;
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  grid-auto-rows: auto;
+}
+.marketplace-item {
+  padding: 2rem;
+  background-color: darken($platinum, 10%);
+  background-color: white;
+}
+.nft-container {
+  width: 100%;
+}
+.nft-name {
+  font-size: 1.8rem;
+  color: $onyx;
+  margin-bottom: 0.5rem;
+}
+.nft-price {
+  padding: 0.5rem;
+  width: 11rem;
+  background-color: greenyellow;
+  text-align: right;
+  border-radius: 5rem 0 0 5rem;
+  position: relative;
+  margin-bottom: 1rem;
+  color: $onyx;
+  div {
+    @include circleConstructor(1rem);
+    background-color: white;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 1rem;
+  }
+}
+.buy-btn {
+  width: 100%;
+  padding: 1rem;
+  background-color: $frenchSkyBlue;
+  border: 0.2rem solid $frenchSkyBlue;
+}

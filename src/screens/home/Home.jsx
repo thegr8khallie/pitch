@@ -1,4 +1,6 @@
-import { Menu, Dashboard, Activity } from './components'
+import { useState, useRef, useEffect } from 'react'
+import { Menu, Dashboard, Activity, LoyaltyPromo } from './components'
+//Audio Player Imports
 import cover1 from '../../assets/audio/music cover/takeitOrleaveit.jpg'
 import cover2 from '../../assets/audio/music cover/foryou.jpg'
 import cover4 from '../../assets/audio/music cover/redemption.jpg'
@@ -14,8 +16,23 @@ import song5 from '../../assets/audio/NO QVLT - Neomorph [NCS Release].mp3'
 import song6 from '../../assets/audio/PLEEG - Spirit [NCS Release].mp3'
 import song7 from '../../assets/audio/Poylow - Got Me (feat. Nito-Onna) [NCS Release].mp3'
 import song8 from '../../assets/audio/Raptures & MAZAN - Sweet [NCS Release].mp3'
-import { useState, useRef, useEffect } from 'react'
+//Loyalty Program imports
+import play from '../../assets/NFTs/play.png'
+import pause from '../../assets/NFTs/pause.png'
+import previous from '../../assets/NFTs/previous.png'
+import next from '../../assets/NFTs/next.png'
+import rewind from '../../assets/NFTs/rewind.png'
+import forward from '../../assets/NFTs/forward.png'
+import headphone from '../../assets/NFTs/headphone.png'
+import megaphone from '../../assets/NFTs/megaphone.png'
+import microphone from '../../assets/NFTs/microphone.png'
+//Algorand and Smart Contract imports
+import MyAlgoConnect from '@randlabs/myalgo-connect'
 export const Home = () => {
+  /********************************************************************************/
+  /* Song Player Scripts start */
+  /********************************************************************************/
+
   //Playlist
   const songs = [
     {
@@ -70,6 +87,7 @@ export const Home = () => {
   });
   const [isPlaying, setIsPlaying] = useState(false)
   const [trackProgress, setTrackProgress] = useState(0)
+  const [currentPage, setCurrentPage] = useState('dashboard');
   //Current track index
   const currentSong = currentlyPlaying.song;
   const songIndex = songs.map((i, j) => {
@@ -101,6 +119,12 @@ export const Home = () => {
   }
   const nextHandler = () => {
     setCurrentlyPlaying(currentSongIndex === songs.length - 1 ? songs[0] : songs[currentSongIndex + 1])
+  }
+  const navToLoyaltyHandler = () => {
+    setCurrentPage('loyalty')
+  }
+  const navToDashboardHandler = () => {
+    setCurrentPage('dashboard')
   }
   //Timer function
   const startTimer = () => {
@@ -173,10 +197,114 @@ export const Home = () => {
     }
     startTimer();
   }
+
+  /********************************************************************************/
+  /* Song Player Scripts end */
+  /********************************************************************************/
+
+  /********************************************************************************/
+  /* Loyalty Promo Scripts start */
+  /********************************************************************************/
+  const nfts = [
+    {
+      id: 1,
+      name: 'Play',
+      nft: play,
+      price: 30,
+    },
+    {
+      id: 2,
+      name: 'Pause',
+      nft: pause,
+      price: 30,
+    },
+    {
+      id: 3,
+      name: 'Rewind',
+      nft: rewind,
+      price: 25,
+    },
+    {
+      id: 4,
+      name: 'Forward',
+      nft: forward,
+      price: 35,
+    },
+    {
+      id: 5,
+      name: 'Previous',
+      nft: previous,
+      price: 20,
+    },
+    {
+      id: 6,
+      name: 'Next',
+      nft: next,
+      price: 40,
+    },
+    {
+      id: 7,
+      name: 'Speak',
+      nft: microphone,
+      price: 100,
+    },
+    {
+      id: 8,
+      name: 'Shout',
+      nft: megaphone,
+      price: 500,
+    },
+    {
+      id: 9,
+      name: 'Listen',
+      nft: headphone,
+      price: 1000,
+    }
+  ];
+  const myAlgoWallet = new MyAlgoConnect()
+  const [isWithdrawFormOpen, setIsWithdrawFormOpen] = useState(false)
+  const [myAlgo, setMyAlgo] = useState({
+    address: '',
+    isConnected: false,
+  })
+  useEffect(() => {
+    if (localStorage.getItem('account')) {
+      setMyAlgo(JSON.parse(localStorage.getItem('account')))
+    }
+  }, [])
+
+  const connectWalletHandler = async () => {
+    try {
+      const accounts = await myAlgoWallet.connect()
+      const address = accounts.map(acct => acct.address).join();
+      localStorage.setItem('account', JSON.stringify({
+        address: address,
+        isConnected: true,
+      }))
+      console.log(address)
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setMyAlgo(JSON.parse(localStorage.getItem('account')))
+    }
+  }
+  // useEffect(() => {
+  //   setMyAlgo(JSON.parse(localStorage.getItem('account')))
+  // })
+  const revealWithdrawFormHandler = () => {
+    setIsWithdrawFormOpen(true)
+  }
+  const submitWithdrawFormHandler = (e) => {
+    e.preventDefault()
+    setIsWithdrawFormOpen(false)
+  }
+  /********************************************************************************/
+  /* Loyalty Promo Scripts end */
+  /********************************************************************************/
   return (
     <div className="homepage">
-      <Menu />
-      <Dashboard songsList={songs} onClick={updateSongHandler} />
+      <Menu page={currentPage} dashboardLink={navToDashboardHandler} loyaltyLink={navToLoyaltyHandler} />
+      {currentPage === 'dashboard' ? <Dashboard songsList={songs} onClick={updateSongHandler} /> : <LoyaltyPromo wallet={myAlgo} connectWallet={connectWalletHandler} isFormOpen={isWithdrawFormOpen} revealForm={revealWithdrawFormHandler} submitForm={submitWithdrawFormHandler} nftList={nfts} />}
       <Activity currentSong={currentlyPlaying} onClick={togglePlayHandler} isPlaying={isPlaying} prev={prevHandler} next={nextHandler} progress={trackProgress} duration={duration} seek={SeekHandler} seekEnd={seekEndHandler} songLength={songLength} playedLength={playedLength} />
     </div>
   )

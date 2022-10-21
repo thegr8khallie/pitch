@@ -31,7 +31,7 @@
     }
   }
 }
-.menu-item:nth-child(1) {
+.active-menu-item {
   div {
     color: white;
     background: linear-gradient(to right, $frenchSkyBlue, $blueCrayola);
