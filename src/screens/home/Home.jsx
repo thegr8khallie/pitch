@@ -27,7 +27,14 @@ import headphone from '../../assets/NFTs/headphone.png'
 import megaphone from '../../assets/NFTs/megaphone.png'
 import microphone from '../../assets/NFTs/microphone.png'
 //Algorand and Smart Contract imports
-import MyAlgoConnect from '@randlabs/myalgo-connect'
+import { loadStdlib } from '@reach-sh/stdlib'
+import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib'
+import algosdk from 'algosdk'
+const stdlib = loadStdlib("ALGO");
+stdlib.setWalletFallback(
+  stdlib.walletFallback({ providerEnv: 'TestNet', MyAlgoConnect })
+)
+const fmt = (x) => stdlib.formatCurrency(x, 4)
 export const Home = () => {
   /********************************************************************************/
   /* Song Player Scripts start */
@@ -210,71 +217,67 @@ export const Home = () => {
       name: 'Play',
       nft: play,
       price: 30,
+      assetID: 118109141
     },
     {
       id: 2,
       name: 'Pause',
       nft: pause,
       price: 30,
+      assetID: 118108733
     },
     {
       id: 3,
       name: 'Rewind',
       nft: rewind,
       price: 25,
+      assetID: 118110002
     },
     {
       id: 4,
       name: 'Forward',
       nft: forward,
       price: 35,
+      assetID: 118106792
     },
     {
       id: 5,
       name: 'Previous',
       nft: previous,
       price: 20,
+      assetID: 118109631
     },
     {
       id: 6,
       name: 'Next',
       nft: next,
       price: 40,
+      assetID: 118108532
     },
     {
       id: 7,
       name: 'Speak',
       nft: microphone,
       price: 100,
+      assetID: 118108042
     },
     {
       id: 8,
       name: 'Shout',
       nft: megaphone,
       price: 500,
+      assetID: 118107646
     },
     {
       id: 9,
       name: 'Listen',
       nft: headphone,
       price: 1000,
+      assetID: 118107106
     }
   ];
-  const myAlgoWallet = new MyAlgoConnect();
-  //localStorage.setItem('play-time', 0)
-  const [isWithdrawFormOpen, setIsWithdrawFormOpen] = useState(false)
-  const [myAlgo, setMyAlgo] = useState({
-    address: '',
-    isConnected: false,
-  })
-  useEffect(() => {
-    if (localStorage.getItem('account')) {
-      setMyAlgo(JSON.parse(localStorage.getItem('account')))
-    }
-  }, [])
   let [currentSession, setCurrentSession] = useState(0);
   let [totalSession, setTotalSession] = useState(0);
-
   let interval = useRef()
   useEffect(() => {
     if (isPlaying) {
@@ -283,40 +286,87 @@ export const Home = () => {
       }, 1000)
     } else {
       clearInterval(interval.current);
-      setTotalSession(totalSession + currentSession)
-      setCurrentSession(0)
+      if (localStorage.getItem('total-playtime')) {
+        const prevTimePlayed = localStorage.getItem('total-playtime');
+        localStorage.setItem('total-playtime', parseInt(prevTimePlayed) + currentSession)
+        setTotalSession(localStorage.getItem('total-playtime'))
+        setCurrentSession(0)
+      } else {
+        localStorage.setItem('total-playtime', currentSession)
+        const newTime = localStorage.getItem('total-playtime')
+        setTotalSession(newTime)
+        setCurrentSession(0)
+      }
     }
   }, [isPlaying])
-  const connectWalletHandler = async () => {
-    try {
-      const accounts = await myAlgoWallet.connect()
-      const address = accounts.map(acct => acct.address).join();
-      localStorage.setItem('account', JSON.stringify({
-        address: address,
-        isConnected: true,
-      }))
-      console.log(address)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setMyAlgo(JSON.parse(localStorage.getItem('account')))
-    }
-  }
-  const revealWithdrawFormHandler = () => {
-    setIsWithdrawFormOpen(true)
-  }
-  const submitWithdrawFormHandler = (e) => {
-    e.preventDefault()
-    setIsWithdrawFormOpen(false)
-  }
   /********************************************************************************/
   /* Loyalty Promo Scripts end */
+  /********************************************************************************/
+
+  /********************************************************************************/
+  /* Reach Scripts starts */
+  /********************************************************************************/
+  const [account, setAccount] = useState({})
+  const [myAlgo, setMyAlgo] = useState({
+    address: '',
+    isConnected: false,
+  })
+  const [pitchBal, setPitchBal] = useState()
+  useEffect(() => {
+    if (localStorage.getItem('account')) {
+      setMyAlgo(JSON.parse(localStorage.getItem('account')))
+    }
+    if (localStorage.getItem('total-playtime')) {
+      setTotalSession(localStorage.getItem('total-playtime'))
+    }
+    if (localStorage.getItem('acct')) {
+      setAccount(JSON.parse(localStorage.getItem('acct')))
+    }
+    if (!localStorage.getItem('withdrawn')) {
+      localStorage.setItem('withdrawn', 0)
+      setPitchBal(totalSession / 10)
+    }
+    if (localStorage.getItem('withdrawn')) {
+      const withdrawn = localStorage.getItem('withdrawn')
+      setPitchBal((localStorage.getItem('total-playtime') / 10) - withdrawn)
+    }
+
+  }, [])
+  //AlgoD params
+  const token =
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+  const server = "https://node.testnet.algoexplorerapi.io";
+  const port = 443;
+  //AlgoD client
+  const algodclient = new algosdk.Algodv2(token, server, port);
+  const connectWalletHandler = async () => {
+    try {
+      const acct = await stdlib.getDefaultAccount();
+      const accountInfo = {
+        address: acct.networkAccount.addr,
+        isConnected: true,
+      }
+      localStorage.setItem('account', JSON.stringify(accountInfo))
+      localStorage.setItem('acct', JSON.stringify(acct))
+      setMyAlgo(accountInfo)
+      setAccount(acct)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  /********************************************************************************/
+  /* Reach Scripts end */
   /********************************************************************************/
   return (
     <div className="homepage">
       <Menu page={currentPage} dashboardLink={navToDashboardHandler} loyaltyLink={navToLoyaltyHandler} />
-      {currentPage === 'dashboard' ? <Dashboard songsList={songs} onClick={updateSongHandler} /> : <LoyaltyPromo wallet={myAlgo} connectWallet={connectWalletHandler} isFormOpen={isWithdrawFormOpen} revealForm={revealWithdrawFormHandler} submitForm={submitWithdrawFormHandler} nftList={nfts} playTime={totalSession} />}
+      {currentPage === 'dashboard' ? <Dashboard songsList={songs} onClick={updateSongHandler} /> : <LoyaltyPromo wallet={myAlgo} connectWallet={connectWalletHandler} nftList={nfts} playTime={totalSession} pitchBal={pitchBal} />}
       <Activity currentSong={currentlyPlaying} onClick={togglePlayHandler} isPlaying={isPlaying} prev={prevHandler} next={nextHandler} progress={trackProgress} duration={duration} seek={SeekHandler} seekEnd={seekEndHandler} songLength={songLength} playedLength={playedLength} />
     </div>
   )
 }
+
+
+//https://testnet.algoexplorer.io/dispenser

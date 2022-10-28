@@ -7,16 +7,8 @@ export const LoyaltyPromo = (props) => {
                     <p className="loyalty-hero-text">Play, Get paid in our native token</p>
                 </div>
                 <div className="pitch-transact">
-                    <div className="pitch-balance"><p>{props.playTime / 10} Pitch</p></div>
-                    <div className="withdraw">
-                        <button className="reveal-form" onClick={props.revealForm} style={props.isFormOpen ? { display: 'none' } : { display: 'block' }}>Withdraw</button>
-                        <form className="withdraw-form" style={props.isFormOpen ? { display: 'block' } : { display: 'none' }} onSubmit={props.submitForm}>
-                            <input type="number" placeholder="Enter amount" />
-                            <input type="submit" value="Withdraw" />
-                        </form>
-                    </div>
+                    <div className="pitch-balance"><p>{props.pitchBal} Pitch</p></div>
                 </div>
-
             </div>
             <div className="promo-info">
                 <div className="time-listened">
@@ -24,13 +16,13 @@ export const LoyaltyPromo = (props) => {
                     <p>{props.playTime} seconds</p>
                 </div>
                 {
-                    props.wallet.isConnected ? <div className="address-container"><p>{props.wallet.address}</p></div> : <button className="connect-wallet" onClick={props.connectWallet}>Connect Wallet</button>
+                    props.wallet.isConnected ? <div className="address-container"><p>{props.wallet.address}</p></div> : <button className="connect-wallet" onClick={props.connectWallet}>Connect MyAlgoWallet</button>
                 }
             </div>
             <section className="marketplace">
                 <h1>Marketplace</h1>
                 <p>Accumulated enough Pitch? Spend them Here</p>
-                <h1 className="collection-name">The Music Memento Collection</h1>
+                <h1 className="collection-name">The Music Memorabilia</h1>
                 <ul className="marketplace-items">
 
                     {
