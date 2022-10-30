@@ -1,4 +1,14 @@
 export const LoyaltyPromo = (props) => {
+    const mintNftHandler = (e) => {
+        const itemCard = e.target.closest('.marketplace-item')
+        const price = itemCard.querySelector('.nft-price > span').textContent;
+        const name = itemCard.querySelector('.nft-name').textContent;
+        if (price > props.pitchBal) {
+            alert('You do not have enough Pitch Token to spend');
+        } else {
+            props.reachFunctions(name, price)
+        }
+    }
     return (
         <section className="loyalty">
             <div className="loyalty-hero">
@@ -31,8 +41,8 @@ export const LoyaltyPromo = (props) => {
                                 <li className="marketplace-item" key={i.id}>
                                     <div className="nft-container"><img src={i.nft} alt={`NFT Id: ${i.id}`} className='nft' /></div>
                                     <p className="nft-name">{`#${i.id} The "${i.name}" NFT`}</p>
-                                    <p className="nft-price">{i.price} $pit<div></div></p>
-                                    <button className="buy-btn">Mint</button>
+                                    <p className="nft-price"><span>{i.price}</span> $pit</p>
+                                    <button className="buy-btn" onClick={mintNftHandler}>Mint</button>
                                 </li>
                             )
                         })

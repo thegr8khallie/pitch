@@ -3,34 +3,29 @@
 export const main = Reach.App(() => {
   //User
   const User = Participant('User', {
-    nftId: UInt,
-    wallet: Address,
+    nftName: Bytes(64),
   });
   //Pitch
   const Pitch = Participant('Pitch', {
-    getBuyRequest: Fun([UInt, Address], Bytes(64))
+    getBuyRequest: Fun([Bytes(64)], Token),
   });
   
   init();
 
-  User.publish();
-  commit();
-
   User.only(() => {
-    const nftId = declassify(interact.nftId);
-    const wallet = declassify(interact.wallet);
+    const nftName = declassify(interact.nftName);
   });
-  
-  User.publish(nftId, price, wallet);
+  User.publish(nftName);
   commit();
 
   Pitch.only(() => {
-    interact.getBuyrequest(nftId, wallet)
+    const nftCreated = declassify(interact.getBuyRequest(nftName))
   })
-  Pitch.publish()
-  const amt = 1;
+  Pitch.publish(nftCreated)
   commit();
-  Pitch.pay([[amt, nftId]]);
+  const amt = 1;
+  Pitch.pay([[amt, nftCreated]]);
+  transfer(amt, nftCreated).to(User);
   commit();
   exit();
 //

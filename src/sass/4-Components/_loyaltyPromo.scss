@@ -128,14 +128,6 @@
   position: relative;
   margin-bottom: 1rem;
   color: $onyx;
-  div {
-    @include circleConstructor(1rem);
-    background-color: white;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 1rem;
-  }
 }
 .buy-btn {
   width: 100%;

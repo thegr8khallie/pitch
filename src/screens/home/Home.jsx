@@ -29,12 +29,12 @@ import microphone from '../../assets/NFTs/microphone.png'
 //Algorand and Smart Contract imports
 import { loadStdlib } from '@reach-sh/stdlib'
 import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib'
-import algosdk from 'algosdk'
+import * as backend from '../../reach/build/index.main.mjs'
+//import algosdk from 'algosdk'
 const stdlib = loadStdlib("ALGO");
 stdlib.setWalletFallback(
   stdlib.walletFallback({ providerEnv: 'TestNet', MyAlgoConnect })
 )
-const fmt = (x) => stdlib.formatCurrency(x, 4)
 export const Home = () => {
   /********************************************************************************/
   /* Song Player Scripts start */
@@ -217,63 +217,63 @@ export const Home = () => {
       name: 'Play',
       nft: play,
       price: 30,
-      assetID: 118109141
+      // assetID: 118109141
     },
     {
       id: 2,
       name: 'Pause',
       nft: pause,
       price: 30,
-      assetID: 118108733
+      // assetID: 118108733
     },
     {
       id: 3,
       name: 'Rewind',
       nft: rewind,
       price: 25,
-      assetID: 118110002
+      // assetID: 118110002
     },
     {
       id: 4,
       name: 'Forward',
       nft: forward,
       price: 35,
-      assetID: 118106792
+      // assetID: 118106792
     },
     {
       id: 5,
       name: 'Previous',
       nft: previous,
       price: 20,
-      assetID: 118109631
+      // assetID: 118109631
     },
     {
       id: 6,
       name: 'Next',
       nft: next,
       price: 40,
-      assetID: 118108532
+      // assetID: 118108532
     },
     {
       id: 7,
       name: 'Speak',
       nft: microphone,
       price: 100,
-      assetID: 118108042
+      // assetID: 118108042
     },
     {
       id: 8,
       name: 'Shout',
       nft: megaphone,
       price: 500,
-      assetID: 118107646
+      // assetID: 118107646
     },
     {
       id: 9,
       name: 'Listen',
       nft: headphone,
       price: 1000,
-      assetID: 118107106
+      // assetID: 118107106
     }
   ];
   let [currentSession, setCurrentSession] = useState(0);
@@ -306,6 +306,7 @@ export const Home = () => {
   /********************************************************************************/
   /* Reach Scripts starts */
   /********************************************************************************/
+
   const [account, setAccount] = useState({})
   const [myAlgo, setMyAlgo] = useState({
     address: '',
@@ -332,13 +333,7 @@ export const Home = () => {
     }
 
   }, [])
-  //AlgoD params
-  const token =
-    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-  const server = "https://node.testnet.algoexplorerapi.io";
-  const port = 443;
-  //AlgoD client
-  const algodclient = new algosdk.Algodv2(token, server, port);
+
   const connectWalletHandler = async () => {
     try {
       const acct = await stdlib.getDefaultAccount();
@@ -355,6 +350,44 @@ export const Home = () => {
     }
   }
 
+  const reachFunctions = async (nftName, nftPrice) => {
+    const bal = stdlib.parseCurrency(100);
+    const accPitch = await stdlib.newTestAccount(bal);
+    const theNFT = await stdlib.launchToken(accPitch, nftName, "NFT", { supply: 1, })
+    const nftId = theNFT.id;
+    const price = nftPrice;
+    const beneficiary = myAlgo.address;
+    const params = { nftId, price, beneficiary };
+
+    //Sale Ready function
+    const startSale = async () => {
+      const accUser = await stdlib.getDefaultAccount();
+      await accUser.tokenAccept(nftId);
+      const ctcUser = accUser.contract(backend, ctcPitch.getInfo())
+      await ctcUser.participants.User({
+        showOutcome: () => {
+          alert(`The ${nftName} NFT has been Minted. Please check your address`)
+        },
+        deductPIT: () => {
+          const oldUsedBal = localStorage.getItem('withdrawn');
+          const newUsedBal = oldUsedBal + nftPrice;
+          localStorage.setItem('withdrawn', newUsedBal);
+          setPitchBal(pitchBal - nftPrice);
+        }
+      })
+    }
+    //Pitch Deploys Contract
+    const ctcPitch = accPitch.contract(backend);
+    await ctcPitch.participants.Pitch({
+      getSale: () => {
+        console.log('NFT Mint details: ', params);
+        return params;
+      },
+      saleReady: () => {
+        startSale();
+      },
+    })
+  }
 
   /********************************************************************************/
   /* Reach Scripts end */
@@ -362,7 +395,7 @@ export const Home = () => {
   return (
     <div className="homepage">
       <Menu page={currentPage} dashboardLink={navToDashboardHandler} loyaltyLink={navToLoyaltyHandler} />
-      {currentPage === 'dashboard' ? <Dashboard songsList={songs} onClick={updateSongHandler} /> : <LoyaltyPromo wallet={myAlgo} connectWallet={connectWalletHandler} nftList={nfts} playTime={totalSession} pitchBal={pitchBal} />}
+      {currentPage === 'dashboard' ? <Dashboard songsList={songs} onClick={updateSongHandler} /> : <LoyaltyPromo wallet={myAlgo} connectWallet={connectWalletHandler} nftList={nfts} playTime={totalSession} pitchBal={pitchBal} reachFunctions={reachFunctions} />}
       <Activity currentSong={currentlyPlaying} onClick={togglePlayHandler} isPlaying={isPlaying} prev={prevHandler} next={nextHandler} progress={trackProgress} duration={duration} seek={SeekHandler} seekEnd={seekEndHandler} songLength={songLength} playedLength={playedLength} />
     </div>
   )
