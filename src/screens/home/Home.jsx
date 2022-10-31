@@ -30,7 +30,6 @@ import microphone from '../../assets/NFTs/microphone.png'
 import { loadStdlib } from '@reach-sh/stdlib'
 import { ALGO_MyAlgoConnect as MyAlgoConnect } from '@reach-sh/stdlib'
 import * as backend from '../../reach/build/index.main.mjs'
-//import algosdk from 'algosdk'
 const stdlib = loadStdlib("ALGO");
 stdlib.setWalletFallback(
   stdlib.walletFallback({ providerEnv: 'TestNet', MyAlgoConnect })
@@ -351,18 +350,16 @@ export const Home = () => {
   }
 
   const reachFunctions = async (nftName, nftPrice) => {
-    const bal = stdlib.parseCurrency(100);
-    const accPitch = await stdlib.newTestAccount(bal);
+    const mnemonic = "machine smile lab current exact offer deputy demand gate hockey regular provide trap release humor vast chunk public crunch mail exit debate message absent clarify";
+    const accPitch = await stdlib.newAccountFromMnemonic(mnemonic);
     const theNFT = await stdlib.launchToken(accPitch, nftName, "NFT", { supply: 1, })
     const nftId = theNFT.id;
     const price = nftPrice;
     const beneficiary = myAlgo.address;
     const params = { nftId, price, beneficiary };
-
+    const accUser = await stdlib.getDefaultAccount();
     //Sale Ready function
     const startSale = async () => {
-      const accUser = await stdlib.getDefaultAccount();
-      await accUser.tokenAccept(nftId);
       const ctcUser = accUser.contract(backend, ctcPitch.getInfo())
       await ctcUser.participants.User({
         showOutcome: () => {
@@ -379,7 +376,8 @@ export const Home = () => {
     //Pitch Deploys Contract
     const ctcPitch = accPitch.contract(backend);
     await ctcPitch.participants.Pitch({
-      getSale: () => {
+      getSale: async () => {
+        await accUser.tokenAccept(nftId)
         console.log('NFT Mint details: ', params);
         return params;
       },
