@@ -327,7 +327,7 @@ export const Home = () => {
       setPitchBal(totalSession / 10)
     }
     if (localStorage.getItem('withdrawn')) {
-      const withdrawn = localStorage.getItem('withdrawn')
+      const withdrawn = parseInt(localStorage.getItem('withdrawn'))
       setPitchBal((localStorage.getItem('total-playtime') / 10) - withdrawn)
     }
 
@@ -363,7 +363,7 @@ export const Home = () => {
       const ctcUser = accUser.contract(backend, ctcPitch.getInfo())
       await ctcUser.participants.User({
         showOutcome: () => {
-          alert(`The ${nftName} NFT has been Minted. Please check your address`)
+          alert(`The ${nftName} has been Minted. Please check your address`)
         },
         deductPIT: () => {
           const oldUsedBal = localStorage.getItem('withdrawn');
