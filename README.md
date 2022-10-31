@@ -27,6 +27,27 @@ Pitch is an media application which allows it's users access to high quality aud
 
 ## Live Demo
 
-The live Demo can be found on [https://youtu.be/lAWD5LgHiZg](Youtube)
+The live Demo can be found on [Youtube](https://youtu.be/lAWD5LgHiZg)
 
 ## Attributions
+
+### Pictures
+
+The pictures used for the “Friends Listening” were all acquired from the pexels website. Further Information on each photo is found below;
+1. Omotayo Adekunle - Photo by Manuel Michael can be found (here)[https://www.pexels.com/photo/woman-in-traditional-clothing-13646260/]
+2. Kathryn Murphy - Photo by Ron Lach can be found (here)[https://www.pexels.com/photo/male-photographer-taking-photo-at-home-with-analog-camera-10272672/]
+3. Bessie Cooper - Photo by Harry Cooke can be found (here)[https://www.pexels.com/photo/calm-woman-standing-against-blue-wall-and-looking-at-camera-6533881/]
+4. Guy Hawkins - Photo by Lany-Jade Mondou can be found (here)[https://www.pexels.com/photo/atelier-murri-13979654/]
+
+### Songs
+
+All Music, Song Cover art, Artist Names etc were gotten the nocopyrightsounds website ncs.io. Further information on each song can be found below;
+1. NO QVLT - Neomorph [Arcade Release] Music provided by NoCopyrightSounds Free Download/Stream: http://ncs.io/Neomorph Watch: http://youtu.be/
+2. Aeden & Sketchez - Take It or Leave It [NCS Release] Music provided by NoCopyrightSounds Free Download/Stream: http://ncs.io/TakeItOrLeaveIt Watch: http://youtu.be/
+3. CHENDA - For You [NCS Release] Music provided by NoCopyrightSounds Free Download/Stream: http://ncs.io/CH_ForYou Watch: http://youtu.be/
+4. Song: Raptures & MAZAN - Sweet [NCS Release] Music provided by NoCopyrightSounds Free Download/Stream: http://ncs.io/Sweet Watch: http://youtu.be/G6uNEyZe4Nc
+5. Max Brhon - Redemption [NCS Release] Music provided by NoCopyrightSounds Free Download/Stream: http://ncs.io/MB_Redemption Watch: http://youtu.be/
+6. Poylow - Got Me (feat. Nito-Onna) [NCS Release]Music provided by NoCopyrightSoundsFree Download/Stream: http://NCS.io/GotMeWatch: http://youtu.be/XnvqUTLuHyM
+7. PLEEG - Spirit [NCS Release] Music provided by NoCopyrightSounds Free Download/Stream: http://NCS.io/Spirit Watch: http://youtu.be/
+NFTs
+All Artwork used for the NFTs where gotten from the 3D icons pack available at  http://3dicons.co
