@@ -1,6 +1,6 @@
 # Pitch: Audio streaming App with Customer Loyalty benefits
 
-Pitch is an media application which allows it's users access to high quality audio. The user is provided with added benefits for using the application, benefits which can be redeemed to your algorand public address. This is a submission for the Algorand greenhouse Hacks_02: "Build a customer loyalty application" Challenge and It is available on the algorand Testnet.
+Pitch is an media application which allows it's users access to high quality audio. The user is provided with added benefits for using the application, benefits which can be redeemed to your algorand public address. This is a submission for the Algorand greenhouse Virtual Hacks_02: "Build a customer loyalty application" Challenge and It is available on the algorand Testnet.
 
 ## Starting up this project
 
